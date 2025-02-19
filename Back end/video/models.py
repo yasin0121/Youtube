@@ -54,12 +54,12 @@ class VIDEO(models.Model):
     thumbnail = models.ImageField(
     upload_to="media/thumbnails",
     validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
-    # video_file = models.FileField(upload_to='media/videos')
+    video_file = models.FileField(upload_to='media/videos')
     uuid = models.UUIDField(default=uuid4, unique=True, editable=False)
     description = models.TextField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
     count_like = models.PositiveIntegerField(default=0)
-    # uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
