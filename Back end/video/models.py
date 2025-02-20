@@ -29,7 +29,7 @@ class Category(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
-    
+
 
 
 # # video
@@ -39,7 +39,7 @@ def validate_video_file(value):
 
     valid_mime_types = ['video/mp4', 'video/mpeg', 'video/avi', 'video/webm']
     valid_extensions = ['.mp4', '.mpeg', '.avi', '.webm']
-    
+
     file_mime_type = value.file.content_type
     file_extension = value.name.split('.')[-1].lower()
 
@@ -54,12 +54,12 @@ class VIDEO(models.Model):
     thumbnail = models.ImageField(
     upload_to="media/thumbnails",
     validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
-    video_url = models.URLField( max_length=256)
+    video_url = models.URLField( max_length=256,default="")
     uuid = models.UUIDField(default=uuid4, unique=True, editable=False)
     description = models.TextField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
     count_like = models.PositiveIntegerField(default=0)
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE,default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -72,7 +72,7 @@ class VIDEO(models.Model):
         return self.title
 
     def thumbnail_preview(self):
-        
+
         if self.thumbnail:
             return format_html(
                 f"<img src='{self.thumbnail.url}' alt='{self.title}' width='100' height='60' >"
@@ -142,12 +142,12 @@ class Comment(models.Model):
             self.count_like -= 1
             self.save()
 
-    
+
 class Playlist(models.Model):
     name = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     videos = models.ManyToManyField(VIDEO, related_name='playlists')
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return f'{self.name} by {self.user.username}'
