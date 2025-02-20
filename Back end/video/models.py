@@ -54,7 +54,7 @@ class VIDEO(models.Model):
     thumbnail = models.ImageField(
     upload_to="media/thumbnails",
     validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
-    video_file = models.FileField(upload_to='media/videos')
+    video_url = models.URLField( max_length=256)
     uuid = models.UUIDField(default=uuid4, unique=True, editable=False)
     description = models.TextField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
